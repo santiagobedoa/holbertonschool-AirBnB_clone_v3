@@ -7,7 +7,7 @@ from models.state import State
 
 
 @app_views.route("/states", strict_slashes=False,
-                methods=['GET'], defaults={"state_id": None})
+                 methods=['GET'], defaults={"state_id": None})
 @app_views.route("/state/<state_id>", methods=['GET'])
 def get_state(state_id):
     """GET /state API route"""
@@ -19,15 +19,17 @@ def get_state(state_id):
         return make_response(jsonify({"error": "Not found"}), 404)
     return jsonify(state.to_dict())
 
+
 @app_views.route("/states/<state_id>", methods=['DELETE'])
 def delete_state(state_id):
     """DELETE /state API route"""
     state = storage.get(State, state_id)
     if not state:
-         return make_response(jsonify({"error": "Not found"}), 404)
+        return make_response(jsonify({"error": "Not found"}), 404)
     storage.delete(state)
     storage.save()
     return make_response(jsonify({}), 200)
+
 
 @app_views.route("/states", strict_slashes=False, methods=["POST"])
 def post_state():
@@ -40,6 +42,7 @@ def post_state():
     s = State(**data)
     s.save()
     return make_response(jsonify(s.to_dict()), 201)
+
 
 @app_views.route("/states/<state_id>", methods=["PUT"])
 def put_state(state_id):
